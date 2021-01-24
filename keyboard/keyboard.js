@@ -56,6 +56,19 @@ const Keyboard = {
         // this will append main to the html body
         this.elements.main.appendChild(this.elements.keysContainer);
         document.body.appendChild(this.elements.main);
+
+        //Brings up the keyboard for elements with "use-keyboard-input" class
+        // the text area has this class
+        //for each input that has that input class, when we focus on that input it will open up the keyboard
+        // open() has a few parameters, but if we don't give it a value, it reverts to an empty string
+        // the value of the text area will be set to the currentValue of the keyboard
+        document.querySelectorAll(".use-keyboard-input").forEach(element => {
+            element.addEventListener("focus", () => {
+                this.open(element.value, currentValue => {
+                    element.value = currentValue;
+                });
+            });
+        });
     },
 
     _createKeys() {
@@ -230,7 +243,7 @@ const Keyboard = {
 
     close() {
         // upon closing the keyboard it resets to an empty string
-        this.value = "";
+        this.properties.value = "";
         // also reset the eventHandlers
         this.eventHandlers.oninput = oninput;
         this.eventHandlers.onclose = onclose;
@@ -242,12 +255,12 @@ const Keyboard = {
 window.addEventListener("DOMContentLoaded", function ()  {
     Keyboard.init();
     // so when the page loads, call the init method of the keyboard object
-    // also open the keyboard when the page loads, it will load the text "parbjot" on page load
-    // the open method has three parameters (initialValue, oninput, onclose)
-    //initialValue is parbjot, the functions are the other parameters
-    Keyboard.open("parbjot", function (currentValue) {
-        console.log("value changed! here it is: " + currentValue);
-    }, function (currentValue) {
-        console.log("keyboard closed! Finishing value: " + currentValue);
-    });
+    // // also open the keyboard when the page loads, it will load the text "parbjot" on page load
+    // // the open method has three parameters (initialValue, oninput, onclose)
+    // //initialValue is parbjot, the functions are the other parameters
+    // Keyboard.open("parbjot", function (currentValue) {
+    //     console.log("value changed! here it is: " + currentValue);
+    // }, function (currentValue) {
+    //     console.log("keyboard closed! Finishing value: " + currentValue);
+    // });
 });
