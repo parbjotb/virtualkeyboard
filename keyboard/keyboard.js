@@ -45,6 +45,8 @@ const Keyboard = {
         this.elements.keysContainer.classList.add("keyboard_keys");
         this.elements.keysContainer.appendChild(this._createKeys());
 
+        // this makes everything in the keysContainer get stored in a keys array
+        // querySelectorAll takes everything from keyboard_key and puts it into keys array
         this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard_key");
 
         // Add to DOM
@@ -93,7 +95,7 @@ const Keyboard = {
             // the createIcon method is what adds the icon picture based on the name
             switch (key) {
                 case "backspace":
-                    keyElement.classList.add("keybboard_key--wide");
+                    keyElement.classList.add("keyboard_key--wide");
                     keyElement.innerHTML = createIconHTML("backspace");
                     // when you press the backspace button, it will remove the last character from the string
                     keyElement.addEventListener("click", () => {
@@ -105,7 +107,7 @@ const Keyboard = {
                     break;
 
                 case "caps":
-                    keyElement.classList.add("keybboard_key--wide", "keyboard_key--activatable");
+                    keyElement.classList.add("keyboard_key--wide", "keyboard_key--activatable");
                     keyElement.innerHTML = createIconHTML("keyboard_capslock");
 
                     // when you press the caps button, we need to toggle caps lock
@@ -118,7 +120,7 @@ const Keyboard = {
                     break;
 
                 case "enter":
-                    keyElement.classList.add("keybboard_key--wide");
+                    keyElement.classList.add("keyboard_key--wide");
                     keyElement.innerHTML = createIconHTML("keyboard_return");
 
                     // when you press the enter button, we need to add a line
@@ -131,8 +133,8 @@ const Keyboard = {
                     break;
 
                 case "space":
-                    keyElement.classList.add("keybboard_key--extra-wide");
-                    keyElement.innerHTML = createIconHTML("spacebar");
+                    keyElement.classList.add("keyboard_key--extra-wide");
+                    keyElement.innerHTML = createIconHTML("space_bar");
 
                     // when you press the enter button, we need to add a space
                     keyElement.addEventListener("click", () => {
@@ -190,10 +192,20 @@ const Keyboard = {
 
     _toggleCapsLock() {
         // toggles the caps lock
+        // by setting the caps lock property to be the opposite of what it is
+        // it will flip the current value of the caps lock
         this.properties.capsLock = !this.properties.capsLock;
 
+        // when the caps lock gets turned on/off
+        // we want the keyboard icons (the text content) to switch as well
+        // this makes it so depending on the status of caps lock, the keys will be upper or lowercase
+        // this.elements.keys is an array made in the init() method, this says for each key in that array
+        // key.childElementCount checks for if there are any icons like spacebar, if there are 0 icons on a key, then the caps lock can change the key
+        // e.g. backspace is a key, but the icon on it is an element, therefore the key has 1 child element and the method doesn't affect it
+        // meanwhile letters do not have any child elements, just their own text content
         for (const key of this.elements.keys) {
             if (key.childElementCount === 0) {
+                // if the caps lock is on, go to uppercase, otherwise go to lowercase
                 key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
             }
         }
