@@ -1,0 +1,82 @@
+.keyboard {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 5px;
+    background: #004134;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    transition: bottom 0.4s;
+}
+
+.keyboard--hidden {
+    bottom: -100%;
+}
+
+.keyboard_keys {
+    text-align: center;
+}
+
+.keyboard_key {
+    height: 45px;
+    width: 6%;
+    max-width: 90px;
+    /* margin is to have space between the keys */
+    margin: 3px;
+    border-radius: 3px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 1.05rem;
+    outline: none;
+    cursor: pointer;
+    /* the below 3 properties ensure icons are vertically and horizontally aligned */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* vertical align makes all buttons align together */
+    vertical-align: top;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+.keyboard_key:active {
+    /* this makes it so when you click the key its a bit darker
+    that last 0.12 means opacity, lower number means darker */
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.keyboard_key--wide {
+    /* gives the backspace key more width than keys */
+    width: 12%;
+}
+
+.keyboard_key--extra-wide {
+    /* gives the spacebar even more width than the keys */
+    width: 36%;
+    max-width: 500px;
+}
+
+
+.keyboard_key--activatable::after {
+    /* positions the caps lock light in an absolute spot and makes it a circle with the radius property */
+    content: '';
+    top: 10px;
+    right: 10px;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+}
+
+.keyboard_key--active::after {
+    /* this is for the light on caps lock */
+    background: #08ff00;
+}
+
+.keyboard_key--dark {
+    background: rgba(255, 255, 255, 0.25);
+}
