@@ -18,7 +18,9 @@ const Keyboard = {
     eventHandlers: {
         // when the other code says open keyboard
         // they're gonna hit the eventHandlers
+        //oninput is what is triggered when we hit any key except done
         oninput: null,
+        // onClose is triggered when we hit the done button
         onclose: null
     },
 
@@ -39,7 +41,7 @@ const Keyboard = {
         this.elements.keysContainer = document.createElement("div");
 
         // Setup main elements, this creates classes and adds the keys
-        this.elements.main.classList.add("keyboard", "1keyboard--hidden");
+        this.elements.main.classList.add("keyboard", "keyboard--hidden");
         
         // this creates the keyboard_keys class
         this.elements.keysContainer.classList.add("keyboard_keys");
@@ -187,7 +189,12 @@ const Keyboard = {
 
     _triggerEvent(handlerName) {
         // triggers one of the two events in eventHandler
-        console.log("Event triggered! Event Name: " + handlerName);
+        // is a function specified as the value of one of the event properties (oninput or onclose)
+        // if there is a function specified, if the user has specified a function for the handler then we can fire it off
+        // we are passing the current value of the keyboard to the code that is using the keyboard
+        if (typeof this.eventHandlers[handlerName] == "function") {
+            this.eventHandlers[handlerName](this.properties.value);
+        }
     },
 
     _toggleCapsLock() {
@@ -212,15 +219,35 @@ const Keyboard = {
     },
 
     open(initialValue, oninput, onclose) {
-
+        // if a value was provided, use it, or pass an empty string instead
+        // this resets the value of the keyboard
+        this.properties.value = initialValue || "";
+        this.eventHandlers.oninput = oninput;
+        this.eventHandlers.onclose = onclose;
+        // when we open the keyboard, it is no longer going to be hidden
+        this.elements.main.classList.remove("keyboard--hidden");
     },
 
     close() {
-
+        // upon closing the keyboard it resets to an empty string
+        this.value = "";
+        // also reset the eventHandlers
+        this.eventHandlers.oninput = oninput;
+        this.eventHandlers.onclose = onclose;
+        // when we hit the done button, it will hide the keyboard
+        this.elements.main.classList.add("keyboard--hidden");
     }
 };
 
 window.addEventListener("DOMContentLoaded", function ()  {
     Keyboard.init();
     // so when the page loads, call the init method of the keyboard object
+    // also open the keyboard when the page loads, it will load the text "parbjot" on page load
+    // the open method has three parameters (initialValue, oninput, onclose)
+    //initialValue is parbjot, the functions are the other parameters
+    Keyboard.open("parbjot", function (currentValue) {
+        console.log("value changed! here it is: " + currentValue);
+    }, function (currentValue) {
+        console.log("keyboard closed! Finishing value: " + currentValue);
+    });
 });
